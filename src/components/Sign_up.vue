@@ -30,7 +30,7 @@
 <script setup>
 
 // Imports
-    import { ref } from "vue"
+    import { onMounted, ref } from "vue"
     import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
     import { useRouter } from "vue-router"
     import { addDoc, collection } from "firebase/firestore"
@@ -41,7 +41,7 @@
     const errorMessage = ref("")
     const Email = ref("")
     const Password = ref("")
-
+    const docid = ref()
 // Functions 
 
     // Adding and removing animatin and reappearing it on click 
@@ -53,7 +53,7 @@
         SI.classList.remove("Remove")
         SI.classList.add('Display')
     }
-
+    
     // Creating new User and adding those User to the DataBase with their password and Emails
     const Sign_up = () => {
         // checking if user has signed up or not 
@@ -83,12 +83,21 @@
     const createUser = async(Email, Password) => {
         console.log("create user called")
         try {
-            
+            console.log("Try Called")
         // Created user will be stored in NewUser collection
             const colRef = collection(db, "New_Users")
-
+            const Users = collection(db, "Users")
             // the email & password passeed from the Parameter will be added to data base with key value email and password 
-            await addDoc(colRef, {email: Email, password: Password})
+           const docRef = await addDoc(colRef, {
+                email: Email, 
+                password: Password
+            })
+            addDoc(Users, {
+                User_Email : Email
+            })
+            console.log("Document created ")
+            docid.value = docRef.id
+ 
         }
         catch (error) {
             alert("Having issue saving user data in the database", error)

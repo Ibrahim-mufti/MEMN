@@ -1,25 +1,25 @@
 <template>
-    <section class="py-32 body">
-        <div class="container border border-gray-300 ">
+    <section class="py-32 bg-image">
+        <div class="container  border-gray-300 ">
             <div class="flex flex-row flew-wrap">
                 <div id="image" class="w-1/2 h-full">
-                    <img class="object-fill w-full h-[920px] blur-sm" src="../assets/standard-quality-control-concept-m.jpg" alt="">
+                    <img class="object-fill w-full h-[920px] border-r-2 rounded-l-[20px]" src="../assets/Side_image.jpg" alt="">
                 </div>
-                <div id="sign-in" class="w-1/2 bg-white text-center rounded-r-[20px]">
-                    <h2 class="text-5xl my-7">MEMS</h2>
+                <div id="sign-in" class=" bg-slate-800 w-1/2 text-center rounded-r-[20px]">
+                    <h2 class="text-5xl text-white my-7">MEMS</h2>
                     <div class="mt-24 mb-10" >
-                        <h2 class="text-3xl">Welcome to MEMS</h2>
+                        <h2 class="text-3xl text-white">Welcome to MEMS</h2>
                     </div>
                     <!-- Display the Error messages that occurs during The Sign in -->
                     <p v-if="errorMessage" class="bg-red-600 pl-5 mx-20 mb-2 text-left text-white borders">{{ errorMessage }}</p>
-                    <div class="mx-20 text-left mb-6">
-                        <h2 class="text-xl text-gray-400 mb-4">Enter your Email</h2>
-                        <p><input class="inp px-4 py-2 w-full border border-gray-500" type="text" placeholder="Type your Email" v-model="Email" @keyup.enter="Sign_in"></p>
+                    <div class="mx-20 text-left text-white mb-6">
+                        <h2 class="text-xl text-white mb-4">Enter your Email</h2>
+                        <p><input class="inp bg-slate-800 px-4 py-2 w-full border border-gray-500" type="text" placeholder="Type your Email" v-model="Email" @keyup.enter="Sign_in"></p>
                     </div>
-                    <div class="mx-20 text-left mb-6">
-                        <h2 class="text-xl text-gray-400 mb-4">Enter your Password</h2>
-                        <p><input class="inp px-4 py-2 w-full border border-gray-500" type="password" placeholder="Type your Password" v-model="Password" @keyup.enter="Sign_in"></p>
-                        <p class="cursor-pointer flex justify-end mt-2 text-red-950 hover:text-red-500 transition-all duration-500 ease-in">Forgot Your Password ?</p>
+                    <div class="mx-20 text-white text-left mb-6">
+                        <h2 class="text-xl mb-4">Enter your Password</h2>
+                        <p><input class="inp bg-slate-800 px-4 py-2 w-full border border-gray-500" type="password" placeholder="Type your Password" v-model="Password" @keyup.enter="Sign_in"></p>
+                        <p class="cursor-pointer flex justify-end mt-2 text-white hover:text-red-500 transition-all duration-500 ease-in">Forgot Your Password ?</p>
                     </div>
                     <div class="mx-20 text-center mb-6">
                         <button class="btn" @click="Sign_in" >Sign In</button>
@@ -34,7 +34,7 @@
                         <p id="g-text" :class="!showtext ? 'hidden' : 'visible'">Sign In with Google</p>
                     </div>
                     <div class="mx-20 my-20">
-                        <h2 class="text-xl">New to MEMS? <a @click="CreateAccountPage" class="cursor-pointer text-2xl text-red-950 hover:text-red-500 transition-all duration-500 ease-in">Create Account</a></h2>
+                        <h2 class="text-xl text-white">New to MEMS? <a @click="CreateAccountPage" class="cursor-pointer text-2xl text-clr hover:text-red-500 transition-all duration-500 ease-in">Create Account</a></h2>
                     </div>
                 </div>
                 <Sign_UP/>
@@ -47,9 +47,11 @@
 // Imports 
 
     import Sign_UP from "../components/Sign_up.vue"
-    import { ref } from "vue"
+    import { onMounted, onUnmounted, ref } from "vue"
     import { getAuth, signInWithEmailAndPassword,GoogleAuthProvider, signInWithPopup } from "firebase/auth";
     import { useRouter } from "vue-router"
+    import { Query, QuerySnapshot, addDoc, collection, getDocs, onSnapshot, runTransaction } from "firebase/firestore";
+    import { db } from "@/main";
 
 //  Variable
 
@@ -59,7 +61,8 @@
     const errorMessage = ref("")
     const Email = ref("")
     const Password = ref("")
-
+    const New_users = collection (db, "New_Users")
+    const Users = collection(db, "Finance")
 // Functions 
 
     // When hovering over the google icon it will slide right and display the Sign in to google text
@@ -93,6 +96,7 @@
             // just to check if the user is logged in correctly
             console.log(data.value)
             console.log(auth.currentUser)
+
             // If successfully loggend in then push to the Dashboard pages
             router.push('/dashboard')
         })
@@ -124,6 +128,8 @@
         })
     }
 
+
+        
 </script>
 
 <style scoped>
@@ -140,9 +146,13 @@
         box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px; 
         border-radius: 20px;
     }
-    .body::before {
+    .bg-image{
+        background-image: url("../assets//abstract-digital-grid-black-background.jpg");
+        background-size: cover;
+    }
+    /* .body::before {
         content: "";
-        background-image: url("../assets/standard-quality-control-concept-m.jpg");
+        background-image: url("../assets/abstract-digital-grid-black-background.jpg");
         background-size: 100% 100%;
         background-repeat: no-repeat;
         background-position:center center;
@@ -152,24 +162,26 @@
         top: 0;
         left: 0;
         z-index: -1;
-        filter: blur(5px);
-    }
+    } */
     #google-btn:hover{
-        padding:5px 30px;
         visibility: visible;
-        animation: slide-left .3s forwards;
-        animation: draw-border 1s forwards;
+        animation: draw-border 1s forwards !important;
+        animation: slide-left .5s forwards;
         cursor: pointer;
     }
+
     @keyframes draw-border {
         0% {
             box-shadow: 0 0 0 0 rgba(255,99,71, 0);
+            padding: 0, 0;
         }
         100% {
             box-shadow: 0 0 0 2px rgb(245, 237, 227);
+            padding:5px 30px;
             border-radius: 60px;
             background-color: black;
             color:white;
+            border:none;
 
         }
         
@@ -180,6 +192,8 @@
     .visible{
         display: block;
         animation: slide-up 1s forwards;
+        border:none;
+
         
     }
     @keyframes slide-up {
@@ -199,13 +213,12 @@
             transform: translateX(0px);
         }
         100% {
-            transform: translateX(0px);
+            transform: translateX(-40px);
         }
     }
 
     .btn{
         font-size: 25px;
-        border: 2px solid;
         padding: 6px 55px;
         color: rgb(218, 217, 217);
         border-radius: 30px;

@@ -1,39 +1,24 @@
 <template>
-    <section class="py-5 w-full fixed">
-        <div class="container ">
-            <div class="flex flex-row justify-between">
-                <div class="w-1/4">
-                    <div class="flex flex-row items-center">
-                        <img class="w-[120px]" src="../assets/logo_transparent.png">
-                        <p class="text-4xl ml-[-20px] text-white">ME<e class="font-extrabold">MN</e></p>
-                    </div>
-                </div>
-                <ul id="Dash_items" class="w-3/5 text-clr flex flex-row justify-around text-lg items-center">
-                    <li><a href="/dashboard">Dashboard</a></li>
-                    <li><a href="/Expense-manager">Expense Manager</a></li>
-                    <li><a href="/Income-manager">Income Manager</a></li>
-                    <li><a href="/About">About</a></li>
-                    <button @click="handleSignOut" class="py-2 px-4 text-xl border rounded-full bg-transparent ">Sign Out</button>
-                </ul>
-            </div>
-        </div>
-    </section>
-    <Welcome/>
-    <Charts/>
+    <div class="bg-image">
+        <Welcome/>
+        <Charts />
+    </div>
 </template>
 
 <script setup>
 
 // Imports
+    import Navbar from "../components/Navbar.vue"
     import Charts from "../components/Charts.vue"
     import Welcome from "../components/Welcome.vue"
     import { onMounted,ref } from 'vue';
-    import {getAuth, onAuthStateChanged, signOut} from "firebase/auth"
-    import router from '@/router';
+    import { getAuth, onAuthStateChanged} from "firebase/auth"
 
+    
 // Variables
     const isloggedin = ref(false)
     let auth
+    
 
 // Functions 
 
@@ -53,13 +38,6 @@
         })
     })
 
-    // Clicking on Sign Out will move the user back to the Sign In page
-    const handleSignOut = () => {
-            signOut(auth).then(() => {
-                router.push("/")
-        })
-    }
-
 </script>
 
 <style scoped>
@@ -78,5 +56,8 @@
     #Dash_items li:hover{
         color:white;
         transition: all .5s ease-in;
+    }
+    .bg-image{
+        background-image: url("../assets//abstract-digital-grid-black-background.jpg");
     }
 </style>
